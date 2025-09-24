@@ -27,6 +27,9 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use('/api/students', studentRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/auth', authRoutes);
+app.get('/', (req, res) => {
+  res.send('Backend is live!');
+});
 
 app.use(errors());
 
