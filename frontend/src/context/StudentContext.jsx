@@ -16,7 +16,7 @@ export const StudentProvider = ({ children }) => {
   const [totalStudents, setTotalStudents] = useState(0);
   const { user } = useAuth();
 
-  const API_URL = 'http://localhost:5000/api/students';
+  const API_URL = `${process.env.REACT_APP_API_URL}/api/students`;
 
   const getAllStudents = useCallback ( async (page = 1, limit = 10) => {
     setLoading(true);

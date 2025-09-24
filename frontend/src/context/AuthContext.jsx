@@ -3,6 +3,7 @@ import axios from 'axios';
  import { jwtDecode } from 'jwt-decode'; 
 
 const AuthContext = createContext();
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const useAuth = () => {
  return useContext(AuthContext);
@@ -27,18 +28,18 @@ export const AuthProvider = ({ children }) => {
  }, []);
 
  const login = async (email, password) => {
- try {
- const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
- const { token } = res.data;
- localStorage.setItem('token', token);
- const decoded = jwtDecode(token);
- axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
- setUser({ role: decoded.role, email: decoded?.email || null, name: decoded?.name || null });
- return decoded.role;
- } catch (error) {
- throw new Error(error.response.data.message || 'Login failed');
- }
- };
+  try {
+    const res = await axios.post(`${API_URL}/api/auth/login`, { email, password });
+    const { token } = res.data;
+    localStorage.setItem('token', token);
+    const decoded = jwtDecode(token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setUser({ role: decoded.role, email: decoded?.email || null, name: decoded?.name || null });
+    return decoded.role;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Login failed');
+  }
+};
 
  const logout = () => {
  localStorage.removeItem('token');
@@ -46,12 +47,12 @@ export const AuthProvider = ({ children }) => {
  };
 
  const register = async (userData) => {
- try {
- await axios.post('http://localhost:5000/api/auth/register', userData);
- } catch (error) {
- throw new Error(error.response.data.message || 'Registration failed');
- }
- };
+  try {
+    await axios.post(`${API_URL}/api/auth/register`, userData);
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Registration failed');
+  }
+};
 
  const value = {
  user,
