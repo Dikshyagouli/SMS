@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo } from 'react';
 import { useStudents } from '../context/StudentContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const AdminDashboard = () => {
   const { students, totalStudents, loading, error, getAllStudents } = useStudents();
+  const { user } = useAuth();
 
   useEffect(() => {
     getAllStudents(1, 50);
@@ -17,6 +19,12 @@ const AdminDashboard = () => {
           <h2 className="dash-title">Admin Dashboard</h2>
           <p className="dash-subtitle">Overview of students and recent activity</p>
         </div>
+        {user && (
+          <div className="dash-user-info">
+            <div className="user-name">{user.name}</div>
+            <div className="user-email">{user.email}</div>
+          </div>
+        )}
         <div className="dash-actions">
           <button className="dash-refresh" onClick={() => getAllStudents(1, 50)}>Refresh</button>
         </div>
